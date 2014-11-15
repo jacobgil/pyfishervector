@@ -1,3 +1,5 @@
+#Author: Jacob Gildenblat, 2014
+#License: you may use this for whatever you like 
 import sys, glob, argparse
 from numpy import *
 import math, cv2
