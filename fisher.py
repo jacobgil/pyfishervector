@@ -94,9 +94,6 @@ def fisher_features(folder, gmm):
 	return features
 
 def train(folder, gmm, features):
-	classifier = train(features)
-
-	print features.values()
 	X = concatenate(features.values())
 	Y = concatenate([float32([i]*len(v)) for i,v in zip(range(0, len(features)), features.values())])
 
