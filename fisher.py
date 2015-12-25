@@ -21,8 +21,8 @@ def image_descriptors(file):
 	return descriptors
 
 def folder_descriptors(folder):
-	files = glob.glob(folder + "/*.jpg")[0:20]
-	print "Calculating descriptos for %d images" % len(files)
+	files = glob.glob(folder + "/*.jpg")
+	print("Calculating descriptos. Number of images is", len(files))
 	return np.concatenate([image_descriptors(file) for file in files])
 
 def likelihood_moment(x, ytk, moment):	
@@ -73,7 +73,7 @@ def fisher_vector(samples, means, covs, w):
 
 def generate_gmm(input_folder, N):
 	words = np.concatenate([folder_descriptors(folder) for folder in glob.glob(input_folder + '/*')]) 
-	print "Training GMM of size %d.." % N
+	print("Training GMM of size", N)
 	means, covs, weights = dictionary(words, N)
 	#Throw away gaussians with weights that are too small:
 	th = 1.0 / N
@@ -87,7 +87,7 @@ def generate_gmm(input_folder, N):
 	return means, covs, weights
 
 def get_fisher_vectors_from_folder(folder, gmm):
-	files = glob.glob(folder + "/*.jpg")[0:20]
+	files = glob.glob(folder + "/*.jpg")
 	return np.float32([fisher_vector(image_descriptors(file), *gmm) for file in files])
 
 def fisher_features(folder, gmm):
@@ -104,7 +104,7 @@ def train(gmm, features):
 	return clf
 
 def success_rate(classifier, features):
-	print "Applying the classifier..."
+	print("Applying the classifier...")
 	X = np.concatenate(np.array(features.values()))
 	Y = np.concatenate([np.float32([i]*len(v)) for i,v in zip(range(0, len(features)), features.values())])
 	res = float(sum([a==b for a,b in zip(classifier.predict(X), Y)])) / len(Y)
@@ -130,4 +130,4 @@ fisher_features = fisher_features(working_folder, gmm)
 #TBD, split the features into training and validation
 classifier = train(gmm, fisher_features)
 rate = success_rate(classifier, fisher_features)
-print "Success rate is %s" % str(rate)
+print("Success rate is", rate)
