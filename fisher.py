@@ -123,12 +123,14 @@ def get_args():
     args = parser.parse_args()
     return args
 
-args = get_args()
-working_folder = args.dir
 
-gmm = load_gmm(working_folder) if args.loadgmm else generate_gmm(working_folder, args.number)
-fisher_features = fisher_features(working_folder, gmm)
-#TBD, split the features into training and validation
-classifier = train(gmm, fisher_features)
-rate = success_rate(classifier, fisher_features)
-print("Success rate is", rate)
+if __name__ == '__main__':
+    args = get_args()
+    working_folder = args.dir
+
+    gmm = load_gmm(working_folder) if args.loadgmm else generate_gmm(working_folder, args.number)
+    fisher_features = fisher_features(working_folder, gmm)
+    #TBD, split the features into training and validation
+    classifier = train(gmm, fisher_features)
+    rate = success_rate(classifier, fisher_features)
+    print("Success rate is", rate)
